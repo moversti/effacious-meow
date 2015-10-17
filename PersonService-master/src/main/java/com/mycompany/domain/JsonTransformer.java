@@ -1,6 +1,7 @@
 package com.mycompany.domain;
 
 import com.google.gson.Gson;
+import com.mycompany.MongoSavable;
 import java.util.List;
 import spark.ResponseTransformer;
 
@@ -16,14 +17,14 @@ public class JsonTransformer implements ResponseTransformer {
 
                 List<MongoSavable> objects = (List<MongoSavable>) model;
                 for (MongoSavable mongoSavable : objects) {
-                    mongoSavable.identifier = mongoSavable.id.toHexString();
-                    mongoSavable.id = null;
+                    mongoSavable.setIdentifier(mongoSavable.getId().toHexString());
+                    mongoSavable.setId(null);
                 }
             }
         } else if (model instanceof MongoSavable) {
             MongoSavable object = (MongoSavable) model;
-            object.identifier = object.id.toHexString();
-            object.id = null;
+            object.setIdentifier(object.getId().toHexString());
+            object.setId(null);
         }
 
         return gson.toJson(model);

@@ -1,10 +1,15 @@
 package com.mycompany;
 
-public class Token {
-    String token;
+import static java.util.UUID.randomUUID;
 
-    public Token() {
+public class Token {
+
+    public static Token generate() {
+        Token t = new Token(randomUUID().toString());
+        return t;
     }
+
+    private final String token;
 
     public Token(String token) {
         this.token = token;
@@ -14,4 +19,5 @@ public class Token {
     public String toString() {
         return token;
     }
+
 }

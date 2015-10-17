@@ -11,4 +11,21 @@ public class MongoSavable {
     protected ObjectId id;
     @Transient
     protected String identifier;
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+    
 }

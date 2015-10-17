@@ -1,18 +1,19 @@
 package com.mycompany;
 
-import com.mycompany.domain.Person;
-import com.mycompany.domain.Error;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mycompany.domain.JsonTransformer;
-import com.mycompany.domain.Token;
 import java.lang.management.ManagementFactory;
 import java.util.HashSet;
 import java.util.Set;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
-import static spark.Spark.*;
+import static spark.Spark.after;
+import static spark.Spark.before;
+import static spark.Spark.get;
+import static spark.Spark.halt;
+import static spark.Spark.post;
 
 public class App {
 
