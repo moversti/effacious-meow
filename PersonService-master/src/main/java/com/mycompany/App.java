@@ -1,4 +1,5 @@
 package com.mycompany;
+
 import com.mycompany.domain.Person;
 import com.mycompany.domain.Error;
 import com.google.gson.Gson;
@@ -14,11 +15,12 @@ import org.mongodb.morphia.Morphia;
 import static spark.Spark.*;
 
 public class App {
+
     public static void main(String[] args) {
         Gson gson = new Gson();
 
         // vaihda seuraavaan joku vapaa tietokanta
-        String mongoLab = "mongodb://ohtu:ohtu@ds027519.mongolab.com:27519/kanta1";
+        String mongoLab = "mongodb://ohtu:ohtu@ds035674.mongolab.com:35674/kanta6";
         MongoClientURI uri = new MongoClientURI(mongoLab);
         Morphia morphia = new Morphia();
         MongoClient mongo = new MongoClient(uri);
@@ -27,7 +29,7 @@ public class App {
 
         morphia.mapPackage("com.mycompany.domain");
         // vaihda seuraavaan sama kun kannan nimi kuin mongourlissa
-        Datastore datastore = morphia.createDatastore(mongo, "kanta1");
+        Datastore datastore = morphia.createDatastore(mongo, "kanta6");
 
         Set<String> validTokens = new HashSet<>();
 
@@ -35,12 +37,24 @@ public class App {
             String name = ManagementFactory.getRuntimeMXBean().getName();
             String dir = System.getProperty("user.dir");
 
-            return "{ \"name\": \""+name+"\", \"dir\": \""+dir+"\" }";
+            return "{ \"name\": \"" + name + "\", \"dir\": \"" + dir + "\" }";
+        });
+
+        before((req, res) -> {
+            String method = req.requestMethod();
+            Set<String> headers = req.headers();
+            String body = req.body();
+            StringBuilder sb = new StringBuilder();
+            sb.append("-------------------\n");
+            sb.append(method).append('\n');
+            headers.forEach(h -> sb.append(h).append(" = ").append(req.headers(h)).append('\n'));
+            sb.append(body);
+            System.out.println(sb.toString());
         });
 
         before("/persons", (request, response) -> {
-            if ( request.requestMethod().equals("GET") &&
-                 !validTokens.contains(request.headers("Authorization") ) ){
+            if (request.requestMethod().equals("GET")
+                    && !validTokens.contains(request.headers("Authorization"))) {
                 halt(401, gson.toJson(Error.withCause("missing or invalid token")));
             }
         });
@@ -52,11 +66,11 @@ public class App {
         post("/persons", (request, response) -> {
             Person person = gson.fromJson(request.body(), Person.class);
 
-            if ( person == null || !person.valid()) {
+            if (person == null || !person.valid()) {
                 halt(400, gson.toJson(Error.withCause("all fields must have a value")));
             }
 
-            if ( datastore.createQuery(Person.class).field("username").equal(person.username()).get() != null ){
+            if (datastore.createQuery(Person.class).field("username").equal(person.username()).get() != null) {
                 halt(400, gson.toJson(Error.withCause("username must be unique")));
             }
 
@@ -69,8 +83,8 @@ public class App {
 
             Person person = datastore.createQuery(Person.class).field("username").equal(dataInRequest.username()).get();
 
-            if ( person==null || !person.password().equals(dataInRequest.password()) ) {
-                halt(401, gson.toJson(Error.withCause( "invalid credentials")));
+            if (person == null || !person.password().equals(dataInRequest.password())) {
+                halt(401, gson.toJson(Error.withCause("invalid credentials")));
             }
 
             Token token = Token.generate();
