@@ -3,7 +3,10 @@ package com.mycompany;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mycompany.domain.Error;
 import com.mycompany.domain.JsonTransformer;
+import com.mycompany.domain.Person;
+import com.mycompany.domain.Token;
 import java.lang.management.ManagementFactory;
 import java.util.HashSet;
 import java.util.Set;
@@ -96,6 +99,13 @@ public class App {
         after((request, response) -> {
             response.type("application/json");
         });
+
+        get("/tokens/:token_value", (request, response) -> {
+            String token_value = request.params(":token_value");
+            boolean valid = validTokens.contains(token_value);
+            Token t = new Token(token_value, valid);
+            return t;
+        }, new JsonTransformer());
 
     }
 }

@@ -1,4 +1,4 @@
-package com.mycompany;
+package com.mycompany.domain;
 
 public class Person extends MongoSavable {
 
@@ -9,7 +9,7 @@ public class Person extends MongoSavable {
 
     public Person() {
     }
-    
+
     public Person(String username, String name, String pw, String address) {
         this.name = name;
         password = pw;
@@ -24,22 +24,21 @@ public class Person extends MongoSavable {
     public String username() {
         return username;
     }
- 
+
     public String password() {
         return password;
     }
-    
+
     public boolean valid() {
-        return username!=null && !username.isEmpty() && 
-               name!=null && !name.isEmpty() && 
-               address!=null && !address.isEmpty() && 
-               password!=null && !password.isEmpty();
+        return username != null && !username.isEmpty()
+                && name != null && !name.isEmpty()
+                && address != null && !address.isEmpty()
+                && password != null && !password.isEmpty();
     }
 
     @Override
     public String toString() {
-        return username+ " " +name+ " "+ address;
+        return username + " " + name + " " + address;
     }
-    
-    
+
 }

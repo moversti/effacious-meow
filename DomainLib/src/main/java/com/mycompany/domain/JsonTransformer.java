@@ -1,7 +1,7 @@
 package com.mycompany.domain;
 
 import com.google.gson.Gson;
-import com.mycompany.MongoSavable;
+import com.mycompany.domain.MongoSavable;
 import java.util.List;
 import spark.ResponseTransformer;
 

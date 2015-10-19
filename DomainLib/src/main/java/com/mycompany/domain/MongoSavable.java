@@ -1,4 +1,4 @@
-package com.mycompany;
+package com.mycompany.domain;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
